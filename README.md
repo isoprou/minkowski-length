@@ -4,6 +4,21 @@ MATLAB code implementing computer search to classify maximal decompositions in 3
 
 Functions:
 
+**LP(X)**
+Takes in a set of points X in R^3 as a n x 3 matrix, and outputs the lattice points in Conv(X) as PTS and the equations that define conv(X)
+
+**minksum(X,Y)**
+Calculates the Minkowski sum of X and Y
+
+**minkone(X)**
+Checks if L(conv(X))=1
+
+**minktwo(X)**
+Checks if L(conv(X))<3
+
+**minkthree(X)**
+Checks if L(conv(X))<4
+
 **GoodBox(P)**
 Returns values x,y,z such that each segment I=[0,(p,q,r)] with L(P+I)=2 satisfies |p|<=x, |q|<=y, and |r|<=z
 
@@ -31,20 +46,6 @@ Returns all 4-point polytopes Q whose segments have absolute value bounded by x,
 **FindTetra2(P,x,y,z)**
 Given P of L(P)=2, returns all 4-point polytopes Q whose segments have absolute value bounded by x,y,z and L(P+Q)=3
 
-**minkone(X)**
-Checks if L(conv(X))=1
-
-**minktwo(X)**
-Checks if L(conv(X))<3
-
-**minkthree(X)**
-Checks if L(conv(X))<4
-
-**LP(X)**
-Takes in a set of points X in R^3 as a n x 3 matrix, and outputs the lattice points in Conv(X) as PTS and the equations that define conv(X)
-
-**minksum(X,Y)**
-Calculates the Minkowski sum of X and Y
 
 
 Procedures named _LemmaX_Y.m_, _PropositionX_Y.m_, _TheoremX_Y.m_ check the finite cases in the proof of the corresponding statement in the paper.
