@@ -1,0 +1,44 @@
+// Theorem 4.4
+
+load"minkthree.mgm";
+
+//Check that L(3*S2)=3
+
+S2:=Polytope([[1,0,0],[0,1,0],[0,0,1],[1,1,1]]);
+time minkthree(3*S2);
+
+//OUTPUT: true
+//Time: 55.040
+
+//Check that L(K2+2*S)>3
+
+K2:=Polytope([[1,0,0],[0,1,0],[1,1,2],[-1,-1,-1]]);
+S:=Polytope([[0,1,0],[1,0,0],[1,1,2],[0,0,0]]);
+time minkthree(K2+2*S);
+
+//OUTPUT: false
+//Time: 194.560
+
+//Check that L(E+2*S2)=3
+
+E:=Polytope([[0,0,0],[1,0,0],[0,1,0],[0,0,1],[1,1,1]]);
+time minkthree(E+2*S2);
+
+//OUTPUT: true
+//Time: 238.570
+
+//Check that L(2*K1+S1)>3
+
+K1:=Polytope([[1,0,0],[0,1,0],[0,0,1],[-1,-1,-1]]);
+S1:=Polytope([[1,0,0],[0,1,0],[0,0,1],[0,0,0]]);
+time minkthree(2*K1+S1);
+
+//OUTPUT: false
+//Time: 0.040
+
+//Check that L(3*K1)>3
+
+time minkthree(3*K1);
+//
+//OUTPUT: false
+//Time: 0.010

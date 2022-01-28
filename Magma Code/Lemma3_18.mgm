@@ -1,0 +1,38 @@
+//Lemma 3.18 Let P=[[0,0,0],[1,0,0],[0,1,0],[a,b,c]]] where 0<=a<=b<=c<=20 and c>=6.
+//For each such P we show that there is no Q with |Q|=3 and L(P+Q)=2.
+
+load "AddTriangleHuh.mgm";
+
+t:= Cputime();
+for c in [6..20] do  
+    for b in [0..c] do
+    	for a in [0..b] do
+	    if GCD(a,GCD(b,c)) eq 1 and GCD(a-1,GCD(b,c)) eq 1 and GCD(a,GCD(b-1,c)) eq 1 then
+	       P:=Polytope([[0,0,0],[1,0,0],[0,1,0],[a,b,c]]);
+	       if AddTriangleHuh(P) then
+	       	  print([a,b,c]);
+	       end if;
+	    end if;
+	end for;
+    end for;
+    print(c);
+end for;
+Cputime(t);
+
+//OUTPUT:
+//6
+//7
+//8
+//9
+//10
+//11
+//12
+//13
+//14
+//15
+//16
+//17
+//18
+//19
+//20
+//8596.260

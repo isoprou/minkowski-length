@@ -1,0 +1,51 @@
+//Finds all polytopes that are the convex hull of 4 points that can be in a maximal decomposition with P
+
+load "FindSegments.mgm";
+load "AppendNoTranslate.mgm";
+
+FindTetra:=function(P)
+L:=Ambient(P);
+GoodTetra:=[];
+
+//Finds all possible segments that could form a triangle in P
+Segs:=FindSegments(P);
+AS:=Segs cat [-a : a in Segs]; // All segments (both directions)
+
+//Takes two segments, checks if the third segment they form can be added to
+//P, then checks if that triangle can be added.  If it can, then adds
+//another segment, checks the 3 other added segments, and then finally 
+//checks the whole tetrahedron (it could be degenerate).  
+for i in [1..#AS] do
+    for j in [i+1.. #AS] do
+	seg3:=AS[i]-AS[j];
+	if seg3 in AS then
+	   Q:=Polytope([Zero(L),AS[i],AS[j]]);
+	   if minktwo(P+Q) then
+	      for k in [j+1..#AS] do
+	      	  seg5:=AS[k]-AS[i];
+		  seg6:=AS[k]-AS[j];
+		  if seg5 in AS and seg6 in AS then
+		     Q:=Polytope([Zero(L),AS[i],AS[j],AS[k]]);
+		     if minktwo(P+Q) then
+		     	//print(Q); // this is for testing only!
+		     	GoodTetra:=AppendNoTranslate(GoodTetra,Q);
+		     end if;
+		  end if;
+	      end for;
+	   end if;
+	end if;
+   end for;
+end for;
+return GoodTetra;
+end function;
+
+
+/// test case
+/// P:=Polytope([[1,0,0],[0,1,0],[0,0,1],[1,1,1]]); // polytope of mink length 1
+/// time Tetras:=FindTetra(P);
+/// Time: 443.170
+/// #Tetras;  // produces 45 such tetrahedra
+/// 45
+
+
+

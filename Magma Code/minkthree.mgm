@@ -1,0 +1,112 @@
+
+//Checks if Minkoswki length L(P)<=3 for a lattice polytope P
+
+
+load "findsegs.mgm";
+load "Zonotope3In.mgm";
+
+/// reduces a list x in Z^3 mod a prime p (returns a list)
+pointmodp:=function(x,p)
+return [Integers() ! x[1] mod p,Integers() ! x[2] mod p,Integers() ! x[3] mod p];
+end function;
+
+
+minkthree:=function(P)
+L:=Ambient(P);
+PTS:=Setseq(Points(P));
+
+if #PTS gt 64 then    /// check if there are too many lattice points
+   return false;
+end if;
+
+segs:=findsegs(PTS);
+
+/// find all segments of lattice length 3
+segs3:=[];
+for s in segs do				
+    if pointmodp(s,3) eq [0,0,0] then
+       Append(~segs3,s);
+    end if;
+end for;
+/// check if there are two parallel segements of lattice length 3 (this includes a segment of length 4)
+pm_seg3:=segs3 cat [[-s[1],-s[2],-s[3]] : s in segs3]; /// make a list of plus and minus directions
+if #Set(pm_seg3) lt #pm_seg3 then
+   return false;
+end if;
+
+/// find all segments of lattice length 2
+segs2:=[];
+for s in segs do				
+    if pointmodp(s,2) eq [0,0,0] then
+       Append(~segs2,s);
+    end if;
+end for;
+// checks if P contains a parallelogram which is a sum of two segments from segs2 up to sign
+s:=#segs2;
+p:=#PTS;
+while p gt 8 do					//note: if P has less than 9 points it can't contain such a parallelogram
+for i in [1..s] do
+     for j in [i+1..s] do
+     	 Par:=Polytope({PTS[1],PTS[1]+L!segs2[i],PTS[1]+L!segs2[j],PTS[1]+L!segs2[i]+L!segs2[j]});
+     	 if Par subset P then
+	    return false;
+	 end if;
+     	 Par:=Polytope({PTS[1],PTS[1]-L!segs2[i],PTS[1]+L!segs2[j],PTS[1]-L!segs2[i]+L!segs2[j]});
+     	 if Par subset P then
+	    return false;
+	 end if;
+     	 Par:=Polytope({PTS[1],PTS[1]+L!segs2[i],PTS[1]-L!segs2[j],PTS[1]+L!segs2[i]-L!segs2[j]});
+     	 if Par subset P then
+	    return false;
+	 end if;
+     	 Par:=Polytope({PTS[1],PTS[1]-L!segs2[i],PTS[1]-L!segs2[j],PTS[1]-L!segs2[i]-L!segs2[j]});
+     	 if Par subset P then
+	    return false;
+	 end if;
+      end for;
+  end for;
+  Exclude(~PTS,PTS[1]);
+  p:=p-1;
+end while;
+
+/// check if there is a sum of 4 distinct segments
+Zonotopes:=Zonotope3In(P);  // compute all zonotopes in P which are a sum of three distinct primitive segments
+for Z in Zonotopes do
+    for seg in segs do
+    	if (Polytope({L!seg})+Z subset P) or (Polytope({-L!seg})+Z subset P) then // check if there are two copies of Z in P
+	   return false;
+	end if;
+     end for;
+end for;
+return true;
+end function;
+
+
+
+/// Testcases:
+//
+//P:=Polytope([[0,0,0],[4,4,4]]);
+//minkthree(P);
+//false
+//P:=Polytope([[0,0,0],[3,3,3]]);
+//minkthree(P);
+//true
+//
+//P:=Polytope([[0,0,0],[2,0,0],[3,1,0],[3,2,0],[1,2,0],[0,1,0]]);
+//minkthree(P);
+//false
+//P:=Polytope([[0,0,0],[2,0,0],[3,1,0],[2,2,0],[1,2,0],[0,1,0]]);
+//minkthree(P);
+//true
+//P:=Polytope([[0,0,0],[2,0,0],[3,1,0],[2,2,0],[1,2,0],[0,1,0]])+Polytope([[0,0,0],[0,0,1]]);
+//minkthree(P);
+//false
+//P:=Polytope([[0,0,0],[2,0,0],[0,2,0],[2,2,0],[0,0,2],[2,0,2],[0,2,2],[2,2,2]]);
+//time minkthree(P);
+//false
+//Time: 0.020
+// P:=Polytope([[0,0,0],[3,0,0],[0,3,0],[0,0,3]]);                                
+//time minkthree(P);                             
+//true
+//Time: 13.230
+

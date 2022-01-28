@@ -1,0 +1,100 @@
+//  Checks to see if L(P)<=2 for a lattice polytope P
+
+load "findsegs.mgm";
+
+/// reduces a list x in Z^3 mod a prime p (returns a list)
+pointmodp:=function(x,p)
+return [Integers() ! x[1] mod p,Integers() ! x[2] mod p,Integers() ! x[3] mod p];
+end function;
+
+minktwo:=function(P)  
+PTS:=[pt : pt in Points(P)];
+if #PTS gt 27 then    /// check if there are too many lattice points
+   return false;
+end if;
+
+segs:=findsegs(PTS);
+/// check if there is a segment of lattice length 3; not needed, see below
+//for s in segs do
+//    if pointmodp(s,3) eq [0,0,0] then 
+//       return false;
+//    end if;
+//end for;
+
+/// compute all segments of lattice length 2
+segs2:=[];
+for s in segs do		
+    if pointmodp(s,2) eq [0,0,0] then
+       segs2:=Append(segs2,s);
+    end if;
+end for;
+
+/// check if there are two parallel segements of lattice length 2 (this includes a segment of length 3)
+pm_seg2:=segs2 cat [[-s[1],-s[2],-s[3]] : s in segs2]; /// make a list of plus and minus directions
+if #Set(pm_seg2) lt #pm_seg2 then
+   return false;
+end if;
+
+/// check is there is a zonotope in P which is a sum of three distinct segments
+p:=#PTS;
+Zon3:=[];
+while p gt 6 do					//note: if P has less than 7 points it can't contain such a zonotope
+ for i in [2..p-2] do
+     for j in [i+1..p-1] do
+     	 for k in [j+1..p] do
+	   vi:=PTS[i]-PTS[1];
+	   vj:=PTS[j]-PTS[1];
+	   vk:=PTS[k]-PTS[1];
+	   if IsPrimitive(vi) and IsPrimitive(vj) and IsPrimitive(vk) then
+	      if (vi ne -vj) and (vi ne -vk) and (vj ne -vk) then
+	      	 Z:=Polytope({PTS[1],PTS[i],PTS[j],PTS[k],PTS[i]+vj,PTS[i]+vk,PTS[j]+vk,PTS[i]+vj+vk});
+		 if Z subset P then
+		    return false;
+		 end if;
+	      end if;
+	   end if;
+	 end for;
+      end for;
+  end for;
+  Exclude(~PTS,PTS[1]);
+  p:=p-1;
+end while;
+return true;
+end function;
+
+/// Testcases:
+//
+//P:=Polytope([[0,0,0],[3,3,3]]);
+//minktwo(P);
+//false
+//P:=Polytope([[0,0,0],[2,2,2]]);
+//minktwo(P);
+//true
+//P:=Polytope([[0,0,0],[1,0,0],[0,1,0],[1,1,0]]);
+//minktwo(P);
+//true
+//P:=Polytope([[0,0,0],[1,0,0],[0,1,0],[1,1,0],[1,1,1]]);
+//minktwo(P);
+//true
+//P:=Polytope([[0,0,0],[2,0,0],[3,1,0],[2,2,0],[1,2,0],[0,1,0]]);
+//minktwo(P);
+//false
+//P:=Polytope([[0,0,0],[1,0,0],[0,1,0],[1,1,0],[1,1,1]])+Polytope([[0,0,0],[0,0,1]]);
+//minktwo(P);
+//false
+//P:=Polytope([[0,0,0],[1,0,0],[0,1,0],[1,1,0],[0,0,1],[1,0,1],[0,1,1],[1,1,1]]);
+//minktwo(P);
+//false
+// P:=Polytope([[0,0,0],[2,0,0],[0,2,0],[0,0,2]]);                                
+//time minktwo(P);                             
+//true
+//Time: 0.060
+// P:=Polytope([[0,0,0],[2,0,0],[0,2,0],[0,0,2],[1,1,1]]);                                
+//time minktwo(P); 
+//false
+//Time: 0.040
+//T0:=Polytope([[1,0,0],[0,1,0],[-1,-1,0]]);
+//Q:=Polytope([[0,0,0],[1,0,0],[0,0,1]]);
+//time minktwo(T0+Q);
+//true
+//Time: 0.180

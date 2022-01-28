@@ -1,0 +1,56 @@
+/// finds all zonotopes in P which are a sum of three distinct primitive segments
+
+Zonotope3In:=function(P)
+PTS:=Setseq(Points(P));
+p:=#PTS;
+Zon3:=[];
+while p gt 6 do					//note: if P has less than 7 points it can't contain such a zonotope
+ for i in [2..p-2] do
+     for j in [i+1..p-1] do
+     	 for k in [j+1..p] do
+	   vi:=PTS[i]-PTS[1];
+	   vj:=PTS[j]-PTS[1];
+	   vk:=PTS[k]-PTS[1];
+	   if IsPrimitive(vi) and IsPrimitive(vj) and IsPrimitive(vk) then
+	      if (vi ne -vj) and (vi ne -vk) and (vj ne -vk) then
+	      	 Z:=Polytope({PTS[1],PTS[i],PTS[j],PTS[k],PTS[i]+vj,PTS[i]+vk,PTS[j]+vk,PTS[i]+vj+vk});
+		 if Z subset P then
+		    Zon3:=Include(Zon3,Z);
+		 end if;
+	      end if;
+	   end if;
+	 end for;
+      end for;
+  end for;
+  Exclude(~PTS,PTS[1]);
+  p:=p-1;
+end while;
+return Zon3;
+end function;
+
+/// Test cases
+//
+//P:=Polytope([[0,0,0],[2,0,0],[0,2,0],[2,2,0],[0,0,1]]);
+//[
+//    2-dimensional polytope with 6 vertices:
+//        (2, 0, 0),
+//        (0, 2, 0),
+//        (2, 1, 0),
+//        (1, 2, 0),
+//        (1, 0, 0),
+//        (0, 1, 0),
+//    2-dimensional polytope with 6 vertices:
+//        (2, 1, 0),
+//        (1, 2, 0),
+//        (2, 2, 0),
+//        (0, 0, 0),
+//        (1, 0, 0),
+//        (0, 1, 0)
+//]
+//P:=Polytope([[0,0,0],[2,0,0],[0,2,0],[2,2,0],[0,0,1],[1,0,1],[0,1,1],[1,1,1]]);
+//time Z:=Zonotope3In(P);                                                      
+//Time: 0.350
+// returns six zonotopes, 2 hexagons at level 0 and 4 parallelotopes (a square at level 0 and the square at level 1)
+
+
+

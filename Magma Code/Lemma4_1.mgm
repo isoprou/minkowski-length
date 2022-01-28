@@ -1,0 +1,49 @@
+// Lemma 4.1 Part 1: Let I_1=[0,e_1], I_1=[0,e_2], I_3=[0,ae_1+be_2+ce_3] with
+// a<=b<=c<=14. Here we find the largest c such that L(I_1+I_2+I_3)=3
+
+load "minkthree.mgm";
+
+t:= Cputime();
+P:=Polytope([[0,0,0],[1,0,0]]);
+Q:=Polytope([[0,0,0],[0,1,0]]);
+maxheight1:=0;
+for c in [1..14] do
+    for b in [0..c-1] do
+    	for a in [0..b] do
+	    R:=Polytope([[0,0,0],[a,b,c]]);
+	    if minkthree(P+Q+R) then
+	       maxheight1:=c;
+	    end if;
+	 end for;
+      end for;
+end for;
+print(maxheight1);
+Cputime(t);
+
+// OUTPUT: 9
+//> Cputime(t);
+//420.660
+
+// Lemma 4.1 Part 2: Let I_1=[0,e_1], I_1=[0,e_1+2e_2], I_3=[0,ae_1+be_2+ce_3] with
+// a<=b<=c<=14. Here we find the largest c such that L(I_1+I_2+I_3)=3
+
+t:= Cputime();
+P:=Polytope([[0,0,0],[1,0,0]]);
+Q:=Polytope([[0,0,0],[1,2,0]]);
+maxheight2:=0;
+for c in [1..14] do
+    for b in [0..c-1] do
+    	for a in [0..b] do
+	    R:=Polytope([[0,0,0],[a,b,c]]);
+	    if minkthree(P+Q+R) then
+	       maxheight2:=c;
+	    end if;
+	 end for;
+      end for;
+end for;
+print(maxheight2);
+Cputime(t);
+
+// OUTPUT: 4
+//> Cputime(t);
+//78.140

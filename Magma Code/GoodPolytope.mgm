@@ -1,0 +1,36 @@
+//Returns the polytope given by inequalities x>=0 and |ax + by + cz| <= 14 for each facet inner normal vector (a, b, c) of P
+
+GoodPolytope:=function(P)
+Ins:=Inequalities(P);
+Norms:=[In[1] : In in Ins] cat [-In[1] : In in Ins];
+Consts:=Append([-14 : n in Norms],0);
+return PolyhedronWithInequalities(Append(Norms,[1,0,0]),Consts);
+end function;
+
+
+//Test case
+//P:=Polytope([[0,0,0],[1,0,0],[0,1,0],[0,0,1]]);
+//G:=GoodPolytope(P);
+//G;
+//3-dimensional polytope G with 9 vertices:
+//    ( 0, -14,   0),
+//    ( 0, -14,  14),
+//    ( 0,   0, -14),
+//    ( 0,   0,  14),
+//    ( 0,  14, -14),
+//    ( 0,  14,   0),
+//    (14, -14, -14),
+//    (14, -14,  14),
+//    (14,  14, -14)
+//Inequalities(G);
+//[
+//    <(1, 1, 1), -14>,
+//    <(0, 1, 0), -14>,
+//    <(1, 0, 0), 0>,
+//    <(0, 0, 1), -14>,
+//    <(-1, -1, -1), -14>,
+//    <(0, 0, -1), -14>,
+//    <(0, -1, 0), -14>,
+//    <(-1, 0, 0), -14>
+//]
+//8

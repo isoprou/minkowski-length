@@ -1,0 +1,33 @@
+//Returns all triangles T such that L(P+T)=2
+
+load "FindSegments.mgm";
+load "GoodTriangles.mgm";
+load "AppendNoTranslate.mgm";
+
+FindTriangles:=function(P)
+L:=Ambient(P);
+Segs:=FindSegments(P);
+Triangles:=[];
+for i in [1..#Segs] do
+    for j in [i+1.. #Segs] do
+    	for k in [j+1..#Segs] do
+	    T:=GoodTriangles(Segs,i,j,k);
+	    for t in T do
+	       Q:=Polytope([Zero(L),t[1],t[2]]);
+	       if minktwo(P+Q) then
+	       	  Triangles:=AppendNoTranslate(Triangles,Q);
+	       end if;
+	     end for;
+	 end for;
+    end for;
+end for;
+return Triangles;
+end function;
+
+
+/// test case
+/// P:=Polytope([[1,0,0],[0,1,0],[0,0,1],[1,1,1]]); // polytope of mink length 1
+/// time Triangles:=FindTriangles(P);
+/// Time: 176.080
+/// #Triangles;  // produces 124 such triangles
+/// 

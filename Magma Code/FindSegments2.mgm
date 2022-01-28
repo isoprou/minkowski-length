@@ -1,0 +1,42 @@
+//Finds all primitive segments I such that L(P+I)<=3 where P is a lattice polytope 
+//and the segments are required to have absolute values of cordiantes at most x,y,z
+//Given P of L(P)=2, finds all segments I=[0,(p,q,r)] with |p|<=x, |q|<=y, and |r|<=z satisfying L(P+I)=3. Returns a list of lattice points pt such that [0,pt] is such a segment. Note that this list does not contain two vectors that are negatives of each other.
+
+load "minkthree.mgm";
+
+FindSegments2:=function(P,x,y,z)
+L:=Ambient(P);
+Segments:=[];
+for i in [0..x] do
+    for j in [-y..y] do
+        for k in [-z..z] do
+	    pt:=L![i,j,k];
+	    if IsPrimitive(pt) and pt ne Zero(L) then
+               I:=Polytope({Zero(L),pt});
+               if minkthree(P+I) then
+                    Include(~Segments, pt);
+                end if;
+            end if;
+        end for;
+    end for;
+end for;
+// remove negatives of segments if they also appear in Segments
+GoodSegments:=Segments;
+for pt in Segments do
+    if -pt in GoodSegments then Exclude(~GoodSegments,pt); 
+    end if;
+end for;
+return GoodSegments;
+end function;
+
+// Testcases
+//
+//P:=Polytope([[0,0,0],[1,0,0],[0,1,0],[1,1,0]]);
+//time FindSegments2(P,2,2,1);
+//
+// produces 33 segments in 2.680 sec
+//
+//P:=Polytope([[0,0,0],[2,0,0],[0,1,0],[1,1,0],[0,0,1]]);
+//time FindSegments2(P,1,1,1);
+//
+//produces 13 segments in 6.060 sec

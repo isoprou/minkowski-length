@@ -1,0 +1,51 @@
+//Proposition 4.3 Here we show that if |P|=|Q|=|R|=4 and each of P and Q is 
+//individually equivalent to S1 then up to a lattice translation P=Q=R=S1.
+//We can assume that P=S1. Then we find all tetrahedra T such that L(S1+T)=2 and put them in Tetras.
+//For each R in Tetras and each Q in Tetras of volume one we check
+//whether L(S1+Q+R)=3. We get 1 pair (Q,R)=(S1,S1) in the output
+
+load "FindTetra.mgm";
+load "minkthree.mgm";
+
+S1:=Polytope([[1,0,0],[0,1,0],[0,0,1],[0,0,0]]);
+time Tetras:=FindTetra(S1);
+  // there are 45 of them; Time: 1988.380
+
+VolumeOneTetras:=[];
+for T in Tetras do
+    if Volume(T) eq 1 then
+       VolumeOneTetras:=Include(VolumeOneTetras,T);
+    end if;
+end for;
+
+// there are 13 of them
+
+t:= Cputime();
+for Q in VolumeOneTetras do
+    for R in Tetras do
+    	if minkthree(S1+Q+R) then
+	   print([Q,R]);
+	end if;
+     end for;
+end for;
+Cputime(t);
+
+
+//OUTPUT
+//
+//[
+//    3-dimensional simplicial polytope Q with 4 vertices:
+//        (0, 0, 0),
+//        (1, 0, 0),
+//        (0, 1, 0),
+//        (0, 0, 1),
+//    3-dimensional simplicial polytope Q with 4 vertices:
+//        (0, 0, 0),
+//        (1, 0, 0),
+//        (0, 1, 0),
+//        (0, 0, 1)
+//]
+//> Cputime(t);
+//181.610
+
+    

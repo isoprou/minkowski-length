@@ -1,0 +1,31 @@
+// Check if two lattice polytopes are translates of each other
+
+// computes the barycenter of P
+barycenter:=function(P)
+L:=Ambient(P);
+V:=Vertices(P);
+VP:=Zero(L);
+for p in V do
+    VP:=VP+p;
+end for;
+return VP/#V;
+end function;
+
+IsTranslate:=function(P,Q)
+if P+Polytope({-barycenter(P)}) eq Q+Polytope({-barycenter(Q)}) then
+   return true;
+else
+   return false;
+end if;
+end function;
+
+
+/// Test cases
+//P:=Polytope([[1,0,0],[0,1,0],[0,0,1],[0,1,1]]);
+//Q1:=Polytope([[-1,0,1],[-2,1,1],[-2,0,2],[0,1,2]]);
+//Q2:=Polytope([[-1,0,1],[-2,1,1],[-2,0,2],[0-2,1,2]]);
+// IsTranslate(P,Q1);                                 
+//false
+// IsTranslate(P,Q2);                                   
+//true
+

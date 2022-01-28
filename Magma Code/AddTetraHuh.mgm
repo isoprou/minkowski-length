@@ -1,0 +1,45 @@
+// Checks if there exists a lattice tetrahedron Q such that L(P+Q)=2. The tetrahedron may be degenerate.
+
+load "FindSegments.mgm";
+
+AddTetraHuh:=function(P);
+L:=Ambient(P);
+//Finds all possible segments that could form a triangle in P
+Segs:=FindSegments(P);
+AS:=Segs cat [-a : a in Segs]; // All segments (both directions)
+
+//Takes two segments, checks if the third segment they form can be added to
+//P, then checks if that triangle can be added.  If it can, then adds
+//another segment, checks the 3 other added segments, and then finally 
+//checks the whole tetrahedron (it could be degenerate).  Once one is
+//found, breaks the loops
+for i in [1..#AS] do
+    for j in [i+1.. #AS] do
+	seg3:=AS[i]-AS[j];
+	if seg3 in AS then
+	   Q:=Polytope([Zero(L),AS[i],AS[j]]);
+	   if minktwo(P+Q) then
+	      for k in [j+1..#AS] do
+	      	  seg5:=AS[k]-AS[i];
+		  seg6:=AS[k]-AS[j];
+		  if seg5 in AS and seg6 in AS then
+		     Q:=Polytope([Zero(L),AS[i],AS[j],AS[k]]);
+		     if minktwo(P+Q) then
+		     	return true;
+		     end if;
+		  end if;
+	      end for;
+	   end if;
+	end if;
+   end for;
+end for;
+return false;
+end function;
+
+
+/// test case
+//P:=Polytope([[1,0,0],[0,1,0],[0,0,1],[2,2,2]]);
+// time AddTetraHuh(P);
+//true
+//Time: 6.120
+

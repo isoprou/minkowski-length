@@ -1,0 +1,30 @@
+// Proposition 3.7 Checks all possible six point empty lattice polytopes to see if a triangle can be added.
+// Empty 6-point polytopes are of the form P=[[0,0,0],[1,0,0],[0,1,0],[0,0,1],[a,b,1],[c,d,1]],
+// with a,b,c,d>0, c+d>a+b, ad-bc=\pm 1. Also, we can assume that a+b<=5 and c+d<=5.
+
+load "minkone.mgm";
+load "AddTriangleHuh.mgm";
+
+t:= Cputime();
+for a in [1..5] do
+    for b in [1..5] do
+    	for c in [1..5] do
+	    for d in [1..5] do
+	    	if (c+d gt a+b) and (Abs(a*d-b*c) eq 1) then
+		   P:=Polytope([[0,0,0],[1,0,0],[0,1,0],[0,0,1],[a,b,1],[c,d,1]]);
+		   if #Points(P) eq 6 then
+		      if minkone(P) then
+		      	 if AddTriangleHuh(P) then
+			    print([a,b,c,d]);
+			 end if;
+		      end if;
+		    end if;
+		  end if;
+               end for;
+	 end for;
+     end for;
+end for;
+Cputime(t);
+
+//OUTPUT: empty
+//364.470

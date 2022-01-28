@@ -1,0 +1,63 @@
+//Proposition 4.2
+
+//Part 1.  Let T0=[[1,0,0],[0,1,0],[-1,-1,0]] and Q=[[0,0,0],[0,0,1],[a,b,-1]]. For |a|<=3 and |b|<=3
+//we check that there is no lattice triangle R with direction vectors (p,q,r) for edges
+//satisfying |p|<=9, |q|<=9, |r|<=2 and L(T0+Q+R)=3.
+// It is enough to consider vectors (a,b,-1) modulo the action of the symmetry group of T0 (which is isomorphic to S3)
+
+load "FindTriangle2.mgm";
+
+T0:=Polytope([[1,0,0],[0,1,0],[-1,-1,0]]);
+L:=Ambient(T0);
+R:=LatticeMap(L,L,Matrix([[0,1,0],[-1,-1,0],[0,0,1]])); // construct rotation
+T:=LatticeMap(L,L,Matrix([[0,1,0],[1,0,0],[0,0,1]]));  // construct reflexion
+S3:=[R^3,R,R^2,T,T*R,T*R^2];                           // generate Symm(T0)
+PTS:=Points(Polytope([[-3,-3,-1],[3,-3,-1],[-3,3,-1],[3,3,-1]])); 
+Orbits:=[];           					//compute orbits of points (a,b,-1)	  
+for pt in PTS do
+  O:={s(pt) : s in S3};
+  Include(~Orbits,O);
+  PTS:=PTS diff O;
+end for;
+PTS:=[Representative(O) : O in Orbits];                 //choose representatives of orbits
+T0:=Polytope([[1,0,0],[0,1,0],[-1,-1,0]]);
+t:= Cputime();
+for pt in PTS do
+   Q:=Polytope({Zero(L),L.3,pt});
+   Rs:=FindTriangle2(T0+Q,9,9,2);			// find triangles R as above such that L(T0+Q+R)=3
+   if Rs ne [] then print([[Q],Rs]); end if;		  //print Q and the list of triangles R
+end for;
+Cputime(t);
+
+// OUTPUT: empty
+//4589.990 // 76 minutes
+
+
+
+//Part 2. Let T0=[[1,0,0],[0,1,0],[-1,-1,0]]. There are three options for each Q and R.
+//Due to symmetry, we assume that Q=[[0,0,0],[1,0,0],[0,0,1]] and then we check 
+// for R=[[0,0,0],[1,0,0],[0,0,1]],[[0,0,0],[0,1,0],[0,0,1]] and [[0,0,0],[1,1,0],[0,0,1]]
+// whether L(T0+Q+R)=3 and  conclude that Q=R=one of these three options.
+
+
+T0:=Polytope([[1,0,0],[0,1,0],[-1,-1,0]]);
+Q:=Polytope([[0,0,0],[1,0,0],[0,0,1]]);
+R:=Q;
+time minkthree(T0+Q+R);
+
+// OUTPUT: true
+//Time: 34.810
+
+R:=Polytope([[0,0,0],[0,1,0],[0,0,1]]);
+time minkthree(T0+Q+R);
+
+// OUTPUT: false
+//Time: 0.050
+
+R:=Polytope([[0,0,0],[1,1,0],[0,0,1]]);
+time minkthree(T0+Q+R);
+
+// OUTPUT: false
+//Time: 65.370
+
+    

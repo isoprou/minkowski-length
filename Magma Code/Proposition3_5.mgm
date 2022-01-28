@@ -1,0 +1,27 @@
+//Proposition 3.5 For P=S_2 find all tetrahedra Q with normalized volume 2 such that L(P+Q)=2.
+
+load "FindTetra.mgm";
+
+t:= Cputime();
+S2:=Polytope([[1,0,0],[0,1,0],[0,0,1],[1,1,1]]);
+Tetras:=FindTetra(S2);
+A:=[];
+for T in Tetras do
+    if Volume(T) eq 2 then
+       A:=Include(A,T);
+    end if;
+ end for;
+ print(A);
+ Cputime(t);
+
+// OUTPUT
+//[
+//    3-dimensional simplicial polytope with 4 vertices:
+//        (0,  0,  0),
+//        (1,  1,  0),
+//        (1,  0, -1),
+//        (0,  1, -1),
+//]
+//521.640
+
+//By adding (0,0,1), we see that this is a translate of S2

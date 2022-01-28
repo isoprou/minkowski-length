@@ -1,0 +1,39 @@
+// Given a list of polytopes S and a polytope P, checks if P is a lattice translate of an //element of S. If not, includes P in the list
+
+load "IsTranslate.mgm";
+
+AppendNoTranslate:=function(S,P)
+for s in S do
+    if IsTranslate(s,P) then
+       return S;
+    end if;
+end for;
+return Include(S,P);
+end function;
+
+// test cases
+// P:=Polytope([[1,0,0],[0,1,0],[0,0,1],[1,1,1]]);
+// S:=[P];
+// Q1:=P+Polytope([[1,2,-3]]); // translate P by a point
+// Q2:=Polytope([[1,0,0],[0,1,0],[0,0,1],[2,3,1]]);  // not a translate of P
+// AppendNoTranslate(S,Q1);
+// [
+//     3-dimensional polytope P with 4 vertices:
+//         (1, 0, 0),
+//         (0, 1, 0),
+//         (0, 0, 1),
+//         (1, 1, 1)
+// ]
+// AppendNoTranslate(S,Q2);
+// [
+//     3-dimensional polytope P with 4 vertices:
+//         (1, 0, 0),
+//         (0, 1, 0),
+//         (0, 0, 1),
+//         (1, 1, 1),
+//     3-dimensional polytope Q2 with 4 vertices:
+//         (1, 0, 0),
+//         (0, 1, 0),
+//         (0, 0, 1),
+//         (2, 3, 1)
+// ]

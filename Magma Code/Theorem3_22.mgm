@@ -1,0 +1,8 @@
+//Theorem 3.22: Check that L(K1+K1)=2.
+
+load "minktwo.mgm";
+
+K1:=Polytope([[1,0,0],[0,1,0],[0,0,1],[-1,-1,-1]]);
+minktwo(2*K1);
+
+//OUTPUT: true

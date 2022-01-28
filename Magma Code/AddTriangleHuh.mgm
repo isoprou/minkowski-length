@@ -1,0 +1,34 @@
+// Checks if there exists a triangle Q such that L(P+Q)=2
+
+// For each triple of directions in FindSegments(P) computes triangles Q that can have these three directions. Then checks L(P+Q)<=2.
+
+load "FindSegments.mgm";
+load "GoodTriangles.mgm";
+
+AddTriangleHuh:=function(P)
+L:=Ambient(P);
+Segs:=FindSegments(P);
+for i in [1..#Segs] do
+    for j in [i+1.. #Segs] do
+    	for k in [j+1..#Segs] do
+	    T:=GoodTriangles(Segs,i,j,k);
+	    for t in T do
+	       Q:=Polytope([Zero(L),t[1],t[2]]);
+	       if minktwo(P+Q) then
+	       //   print(Q); /// this is for a test 
+	       	  return true;
+	       end if;
+	     end for;
+	 end for;
+    end for;
+end for;
+return false;
+end function;
+
+
+/// test case
+//P:=Polytope([[1,0,0],[0,1,0],[0,0,1],[2,2,2]]);
+// time AddTriangleHuh(P);   
+//true
+//Time: 4.610
+

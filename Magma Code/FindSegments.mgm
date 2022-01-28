@@ -1,0 +1,35 @@
+// Finds all (primitive) segments which can be in a maximal decomposition with P. Returns a list of lattice points pt such that [0,pt] is such segment. Note that this list does not contain two vectors that are negatives of each other.
+
+load "minktwo.mgm";
+load "GoodPolytope.mgm";
+
+FindSegments:=function(P)
+GoodSegments:=[];
+L:=Ambient(P);
+SetPTS:=Points(GoodPolytope(P)) diff {Zero(L)};
+PTS:=SetPTS;
+// remove negatives of points if they also appear in PTS
+for pt in SetPTS do
+    if -pt in PTS then PTS:=PTS diff {pt};  
+    end if;
+end for;
+// check if L(P+I)<=2
+for pt in PTS do
+  if IsPrimitive(pt) then
+       I:=Polytope({Zero(L),pt});
+       if minktwo(P+I) then
+	  GoodSegments:=Append(GoodSegments,pt);
+       end if;
+    end if;       
+end for;
+return GoodSegments;
+end function;
+
+
+/// test case
+/// P:=Polytope([[1,0,0],[0,1,0],[0,0,1],[1,1,1]]); // polytope of mink length 1
+/// time Segs:=FindSegments(P);
+/// Time: 50.230
+/// #Segs;  // produces 109 primitive segments
+/// 109
+

@@ -1,0 +1,58 @@
+ //Lemma 3.1 Part 1: Let P be the standard unit simplex in the (x,y) plane. 
+ //Here we run through all segments I with the primitive direction vector 
+ //(p,q,r), where 0<= p<= q<= r<=43. Whenever we have L(P+I)=2 and r>14, 
+ //we print r. The output is empty, which proves that r<=14.
+
+load "minktwo.mgm";
+
+t:= Cputime();
+P:=Polytope([[0,0,0],[1,0,0],[0,1,0]]);
+ for r in [1..43] do
+     for q in [0..r] do
+         for p in [0..q] do
+             if GCD(p,GCD(q,r)) eq 1 then
+               I:=Polytope([[0,0,0],[p,q,r]]);
+                  if minktwo(P+I) and r gt 14 then
+                  print(r);
+                  end if;
+             end if;
+         end for;
+     end for;
+ end for;
+ Cputime(t);
+
+//OUTPUT: empty
+//7901.540  // 131 minutes
+
+
+ //Lemma 3.1 Part 2: Let P be the standard T_0=conv{(1,0,0), (0,1,0),(-1,-1,0)} 
+ // in the (x,y)-plane. Here we run through all segments I with the primitive 
+ //direction vector (p,q,r) where 0<=p<=q<=r<= 14. Whenever we have L(P+I)=2 
+ //we print [p,q,r]. The output shows that r<=2.
+
+t:= Cputime();
+P:=Polytope([[1,0,0],[0,1,0],[-1,-1,0]]);
+ for r in [1..14] do
+     for q in [0..r] do
+         for p in [0..q] do
+             if GCD(p,GCD(q,r)) eq 1 then
+               I:=Polytope([[0,0,0],[p,q,r]]);
+                  if minktwo(P+I) then 
+                  print([p,q,r]);
+                  end if;
+             end if;
+         end for;
+     end for;
+ end for;
+  Cputime(t);
+  
+
+//OUTPUT:
+//[ 0, 0, 1 ]
+//[ 0, 1, 1 ]
+//[ 1, 1, 1 ]
+//[ 0, 1, 2 ]
+//[ 1, 1, 2 ]
+//[ 1, 2, 2 ]
+//16.910
+//

@@ -1,0 +1,35 @@
+//Given an ordered list S of lattice points checks if \pm S[i], \pm S[j], \pm S[k]
+//can serve as vectors of sides of a triangle.
+//If yes, produces the list of pairs such that the pair together with the origin forms such a triangle;  otherwise returns an empty list.
+
+GoodTriangles:=function(S,i,j,k)
+triangles:=[];
+L:=Ambient(Polytope({S[i]}));
+if S[i]+S[j]+S[k] eq Zero(L) then
+   triangles:=triangles cat [[S[i],-S[j]],[S[i],-S[k]]];
+end if;
+if S[i]+S[j]-S[k] eq Zero(L) then
+   triangles:=triangles cat [[S[i],-S[j]],[S[i],S[k]]];
+end if;
+if S[i]-S[j]+S[k] eq Zero(L) then
+   triangles:=triangles cat [[S[i],S[j]],[S[i],-S[k]]];
+end if;
+if -S[i]+S[j]+S[k] eq Zero(L) then
+   triangles:=triangles cat [[S[i],S[j]],[S[i],S[k]]];
+end if;
+return triangles;
+end function;
+
+
+// test case: Should produce four triangles
+//
+//P:=Polytope([[1,0,0],[2,1,0],[1,1,0],[0,1,0]]);
+//S:=[p : p in Points(P)];
+//for i in [1..#S] do
+//for j in [i+1..#S] do
+//for k in [j+1..#S] do
+//GoodTriangles(S,i,j,k);
+//end for;
+//end for;
+//end for;
+

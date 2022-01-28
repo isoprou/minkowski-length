@@ -1,0 +1,46 @@
+//Finds are triangles Q such that L(P+Q)<=3 where P is a lattice polytope 
+//and the segments of the triangle are required to have absolute values of cordiantes at most x,y,z
+
+load "FindSegments2.mgm";
+load "GoodTriangles.mgm";
+load "AppendNoTranslate.mgm";
+
+FindTriangle2:=function(P,x,y,z)
+L:=Ambient(P);
+
+//Finds all possible segments that could appear in the triangle
+Segs:=FindSegments2(P,x,y,z);
+
+// For each triple of directions in Segs computes triangles Q that can have these three directions.
+// Then checks L(P+Q)<=3.
+
+Triangles:=[];
+
+for i in [1..#Segs] do
+    for j in [i+1.. #Segs] do
+    	for k in [j+1..#Segs] do
+	    T:=GoodTriangles(Segs,i,j,k);
+	    for t in T do
+	       Q:=Polytope([Zero(L),t[1],t[2]]);
+	       if minkthree(P+Q) then
+	        //  print(Q); /// this is for testing 
+	       	  Triangles:=AppendNoTranslate(Triangles,Q);
+	       end if;
+	     end for;
+	 end for;
+    end for;
+end for;
+return Triangles;
+end function;
+
+
+// Testcases
+//
+//P:=Polytope([[0,0,0],[1,0,0],[0,1,0],[1,1,0]]);
+//time F:=FindTriangle2(P,2,2,1); // should produce 256 triangles
+//Time: 252.650 
+//
+//P:=Polytope([[0,0,0],[2,0,0],[0,1,0],[1,1,0],[0,0,1]]);
+//time F:=FindTriangle2(P,1,1,1);  // should produce 36 triangles
+//Time: 118.340
+

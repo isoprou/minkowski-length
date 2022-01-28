@@ -1,0 +1,25 @@
+load "findsegs.mgm";
+//  Checks to see if L(P)=1 for a lattice polytope P
+
+minkone:=function(P)  
+PTS:=[pt : pt in Points(P)];
+if #PTS gt 8 then    /// check if there are too many lattice points
+   return false;
+end if;
+segs:=findsegs(PTS);
+pm_segs:=segs cat [[-s[1],-s[2],-s[3]] : s in segs]; /// make a list of plus and minus directions
+/// check if there are two parallel segements of lattice length 2
+if #Set(pm_segs) lt #pm_segs then 
+   return false;
+end if;
+return true;
+end function;
+
+// test case
+// P:=Polytope([[1,0,0],[0,1,0],[0,0,1],[1,1,1]]); // polytope of mink length 1
+// time minkone(P);
+// true
+// Time: 0.040
+
+
+	   

@@ -1,0 +1,18 @@
+//Theorem 3.6 
+//Finds all possible 4-point Q that can appear in a maximal decomposition with
+//E=[[0,0,0],[1,0,0],[0,1,0],[0,0,1],[1,1,1]]
+
+load "FindTetra.mgm";
+
+E:=Polytope([[0,0,0],[1,0,0],[0,1,0],[0,0,1],[1,1,1]]);
+FindTetra(E);
+
+//OUTPUT:
+//[
+//    3-dimensional polytope with 4 vertices:
+//        (0,  0,  0),
+//        (0,  1, -1),
+//        (1,  1,  0),
+//        (1,  0, -1)
+//]
+//Note: this is S2+(0,0,-1)
