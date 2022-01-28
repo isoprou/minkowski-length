@@ -14,11 +14,8 @@ Checks if L(P)<=2 for a lattice polytope P
 **minkthree(X)**
 Checks if L(P)<=3 for a lattice polytope P
 
-**GoodPolytope(P)**
-Returns the polytope given by inequalities x>=0 and |ax + by + cz| <= 14 for each facet inner normal (a, b, c) of P
-
-**FindSegments(P,x,y,z)**
-Finds all primitive segments which can be in a maximal decomposition with P. Returns a list of lattice points pt such that [0,pt] is such a segment. The list does not contain two vectors that are negatives of each other.
+**FindSegments(P)**
+Finds all primitive segments I such that L(P+I)=2. Returns a list of lattice points pt such that [0,pt] is such a segment. The list does not contain two vectors that are negatives of each other.
 
 **FindSegments2(P,x,y,z)**
 Given P of L(P)=2, finds all segments I=[0,(p,q,r)] with |p|<=x, |q|<=y, and |r|<=z satisfying L(P+I)=3.
@@ -38,13 +35,20 @@ Returns all triangles T such that L(P+T)=2
 **FindTetra(P)**
 Returns all lattice tetrahedra Q such that L(P+Q)=2. Some tetrahedra may be degenerate.
 
+**GoodPolytope(P)**
+Returns the polytope given by inequalities x>=0 and |ax + by + cz| <= 14 for each facet inner normal (a, b, c) of P
+
 **GoodTriangles(S,i,j,k)**
 Given an ordered list S of lattice points checks if \pm S[i], \pm S[j], \pm S[k] can serve as vectors of sides of a triangle. If yes, produces the list of pairs such that the pair together with the origin forms such a triangle; otherwise returns an empty list.
 
 **IsTranslate(P,Q)**
 Checks if two lattice polytopes P, Q are translates of each other
 
+**AppendNoTranslate(S,P)**
+Given a list of polytopes S and a polytope P, checks if P is a lattice translate of an element of S. If not, includes P in the list
+
 **Zonotope3In(P)**
 Returns a list of all zonotopes in P which are a sum of three distinct primitive segments
+
 
 Procedures named _LemmaX_Y.mgm_, _PropositionX_Y.mgm_, _TheoremX_Y.mgm_ check the finite cases in the proof of the corresponding statement in the paper.
