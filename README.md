@@ -1,5 +1,5 @@
 # minkowski-length
-Magma code implementing computer search to classify maximal decompositions in 3D polytopes of Minkowski length up to 3, as described in our paper _F_q-zeros of sparse trivariate polynomials and toric 3-fold codes_ (https://arxiv.org/abs/2105.10071). Joint work with Kyle Meyer and Jenya Soprunova.
+<a href="http://magma.maths.usyd.edu.au/magma/">MAGMA</a> code implementing computer search to classify maximal decompositions in 3D polytopes of Minkowski length up to 3, as described in our paper _F_q-zeros of sparse trivariate polynomials and toric 3-fold codes_ (https://arxiv.org/abs/2105.10071). Joint work with Kyle Meyer and Jenya Soprunova.
 
 Given a lattice polytope P, the _Minkowski length_ L(P) is the largest L such that P contains the Minkowski sum of L non-trivial lattice polytopes. Every such sum is called a maximal decomposition in P. 
 
