@@ -47,6 +47,9 @@ Checks if two lattice polytopes P, Q are translates of each other
 **AppendNoTranslate(S,P)**
 Given a list of polytopes S and a polytope P, checks if P is a lattice translate of an element of S. If not, includes P in the list
 
+**findsegs(X)**
+Returns all of the vectors between two distinct points in set X in R^3. The list does not contain two vectors that are negatives of each other.
+
 **Zonotope3In(P)**
 Returns a list of all zonotopes in P which are a sum of three distinct primitive segments
 
