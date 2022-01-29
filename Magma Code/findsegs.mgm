@@ -1,0 +1,26 @@
+// Returns all of the vectors between two distinct points in set X in R^3. The list does not contain two vectors that are negatives of each other.
+
+findsegs:=function(X)
+segs:=[];
+n:=#X;
+for i in [1..n-1] do
+    for j in [i+1..n] do
+    	seg:=[(Vector(X[i])-Vector(X[j]))[k] : k in [1..3]];
+    	segs:=Append(segs,seg);
+    end for;
+end for;
+return segs;
+end function;
+
+// test case
+// X:=[[0,0,0],[1,0,0],[0,1,0],[0,0,1]];
+// time findsegs(X);
+//[
+//    [ -1, 0, 0 ],
+//    [ 0, -1, 0 ],
+//    [ 0, 0, -1 ],
+//    [ 1, -1, 0 ],
+//    [ 1, 0, -1 ],
+//    [ 0, 1, -1 ]
+//]
+//Time: 0.000
