@@ -1,0 +1,32 @@
+//Proposition 3.20: Here R=[[1,0,0],[0,1,0],[1,1,2],[-1,-1,-1],[a,b,c]], where
+//|a|<=3, |b|<=3, |c|<=5 and [a,b,c]\neq [1,0,0], [0,1,0], [1,1,2], [-1,-1,-1].
+//We check that there is no Q with |Q|=3 such that L(P+Q)=3.
+
+load "minkone.mgm";
+load "AddTriangleHuh.mgm";
+
+t:= Cputime();
+for a in [-3..3] do 
+    for b in [-3..3] do 
+        for c in [-5..5] do  
+            R:=Polytope([[1,0,0],[0,1,0],[1,1,2],[-1,-1,-1],[a,b,c]]);
+             if minkone(R) then
+                 if AddTriangleHuh(R) then
+                    print([a,b,c]);
+                 end if;
+             end if;
+         end for;
+    end for;
+end for;
+Cputime(t);
+
+//OUTPUT:
+//[ -1, -1, -1 ]
+//[ 0, 0, 0 ]
+//[ 0, 1, 0 ]
+//[ 1, 0, 0 ]
+//[ 1, 1, 2 ]
+//267.710
+//Note that all of these are lattice points in K2.
+
+

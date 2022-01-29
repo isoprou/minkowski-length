@@ -1,0 +1,59 @@
+//Proposition 3.15:  We go through the 8 lattice tetrahedra with one interior lattice point
+//(Fano tertrahedra) to see if they can have a lattice triangle added to them so that the
+//Misnkowski length of the Minkowski sum is 2.
+
+K1:=Polytope([[1,0,0],[0,1,0],[0,0,1],[-1,-1,-1]]);
+time AddTriangleHuh(K1);
+
+//OUTPUT: 1
+//true
+//Time: 12.510
+
+K2:=Polytope([[1,0,0],[0,1,0],[1,1,2],[-1,-1,-1]]);
+time AddTriangleHuh(K2);
+
+//OUTPUT:
+//true
+//Time: 11.690
+
+K3:=Polytope([[1,0,0],[0,1,0],[1,-3,5],[-2,2,-5]]);
+time AddTriangleHuh(K3);
+
+//OUTPUT:
+//false
+//Time: 0.440
+
+K4:=Polytope([[1,0,0],[0,1,0],[1,-2,3],[-1,1,-2]]);
+time AddTriangleHuh(K4);
+
+//OUTPUT:
+//false
+//Time: 8.660
+
+K5:=Polytope([[1,0,0],[0,1,0],[-2,1,5],[1,-1,-3]]);
+time AddTriangleHuh(K5);
+
+//OUTPUT:
+//false
+//Time: 6.380
+
+K6:=Polytope([[1,0,0],[0,1,0],[1,-2,5],[-1,1,-4]]);
+time AddTriangleHuh(K6);
+
+//OUTPUT:
+//false
+//Time: 3.310
+
+K7:=Polytope([[1,0,0],[0,1,0],[1,-2,7],[-1,1,-5]]);
+time AddTriangleHuh(K7);
+
+//OUTPUT:
+//false
+//Time: 1.060
+
+K8:=Polytope([[1,0,0],[0,1,0],[-2,2,7],[1,-2,-5]]);
+time AddTriangleHuh(K8);
+
+//OUTPUT:
+//false
+//Time: 0.510
