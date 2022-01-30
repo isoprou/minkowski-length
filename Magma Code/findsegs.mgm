@@ -1,4 +1,4 @@
-// Returns all of the vectors between two distinct points in set X in R^3. The list does not contain two vectors that are negatives of each other.
+// Given an ordered list [p_1,...,p_n] in R^3, returns the vectors p_i-p_j for 1<=i<j<=n.
 
 findsegs:=function(X)
 segs:=[];
